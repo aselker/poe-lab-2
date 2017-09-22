@@ -13,8 +13,8 @@ def main():
   rs = [] #Read as plural of r -- "r's"
 
   with serial.Serial("/dev/ttyACM0") as ser:
+    sleep(2) #Wait for Arduino to boot
     ser.write('1'.encode()) #Tell the scanner to start
-    #sleep(1) #Time to get in position -- necessary?
     while True:
       words = ser.readline().split(b",") #Split comma-separated values
       words = list(map((lambda x: x.decode().replace("\r","").replace("\n","")), words)) #Remove newlines and carriage returns

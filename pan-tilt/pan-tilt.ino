@@ -29,13 +29,15 @@ void setup() {
   pan.attach(10);
   tilt.attach(9);
 
-  while(Serial.read()!='1'){
-  }
+
   
 }
 
 
 void loop() {
+
+  while(Serial.read()!='1'){} //Wait for a prompt from Python
+  
   for (int azimuth=azimuthLower; azimuth<=azimuthUpper; azimuth=azimuth+2*azimuthStep) {
     tilt.write(azimuth);
     delay(200);
@@ -53,5 +55,6 @@ void loop() {
       Serial.println(String(azimuth+azimuthStep) + "," + String(elevation) + "," + String(sharp.distance()));
     }
   }
-delay(750); 
+  Serial.println("-1,-1,-1"); //Done!
+  delay(750); 
 }  
