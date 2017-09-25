@@ -22,9 +22,10 @@ def main():
     sleep(2) #Wait for Arduino to boot
     ser.write('1'.encode()) #Tell the scanner to start
     while True:
-      words = ser.readline().split(b",") #Split comma-separated values
-      words = list(map((lambda x: x.decode().replace("\r","").replace("\n","")), words)) #Remove newlines and carriage returns
-      #assert len(words) == 3
+      words = ser.readline().split(b",") 
+        #Split comma-separated values
+      words = list(map((lambda x: x.decode().replace("\r","").replace("\n","")), words)) 
+        #Remove newlines and carriage returns
       print("Words: " + str(words))
       t1 = int(words[0]) #"theta sub 1"
       t2 = int(words[1])
