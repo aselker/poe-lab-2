@@ -13,11 +13,11 @@ Servo tilt;
 
 int azimuthLower = 0;
 int azimuthUpper = 180;
-int azimuthStep = 5;
+int azimuthStep = 20;
 
 int elevationLower = 45;
 int elevationUpper = 180-45;
-int elevationStep=5;
+int elevationStep = 20;
 
 int distance;
 
