@@ -6,11 +6,13 @@
 
 import serial
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from time import sleep
 from math import sin, cos, pi
+from random import randrange
 
-sensorOffset = 24 #mm, horizontal
+sensorOffset = 2 #cm, horizontal
 
 def main():
   
@@ -30,10 +32,13 @@ def main():
 
       if t1 == t2 == r == -1: #-1 is used to indicate end of scan
         break
-      else:
-        rs.append((t1, t2, r)) #List of pixels
+      #elif (r < 151): rs.append((t1, t2, r)) #List of pixels
+      else: rs.append((t1, t2, r)) #List of pixels
 
-  xs = ys = zs = []
+  xs = []
+  ys = []
+  zs = []
+  cs = []
   
   for (t1, t2, r) in rs: #Transform points from offset radial to Cartesian
     t1 = t1 * 2*pi / 360 #Degrees to radians
@@ -49,6 +54,7 @@ def main():
     xs.append(x)
     ys.append(y)
     zs.append(z)
+    cs.append(r)
 
     print("X: " + str(x) + " Y: " + str(y) + " Z: " + str(z))
 
@@ -56,8 +62,7 @@ def main():
   fig = plt.figure()
   ax = fig.add_subplot(111, projection='3d')
 
-  #ax.scatter(xs, ys, zs, s=1, c='b', depthshade=False)
-  ax.scatter(xs, ys, 0, s=1, c='b', depthshade=False)
+  ax.scatter(xs, ys, zs, s=3, c=cs, cmap = cm.coolwarm, depthshade=False)
   ax.set_xlabel('X')
   ax.set_ylabel('Y')
   ax.set_zlabel('Z')
