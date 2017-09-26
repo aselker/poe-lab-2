@@ -1,20 +1,25 @@
 //Arduino code for 3D scanner
 //Ben Lilly and Adam Selker, PoE 2017
 //
-//By setting azimuthLower and azimuthUpper, you choose how far left and right the sensor pans while scannning.
-//By setting elevationLower and elevationUpper, you choose how high and low the sensor tilts while scanning. elevationLower and elevationUpper both have to be even or zero.
-//azimuthLower and azimuthUpper must have a difference that's a multiple of azimuthStep
-//elevationLower and elevationUpper must have a difference that's a multiple of elevationStep
+//By setting azimuthLower and azimuthUpper, you choose how far
+// left and right the sensor pans while scannning.
+//By setting elevationLower and elevationUpper, you choose how 
+// high and low the sensor tilts while scanning. elevationLower
+// and elevationUpper both have to be even or zero.
+//azimuthLower and azimuthUpper must have a difference that's a
+// multiple of azimuthStep
+//elevationLower and elevationUpper must have a difference that's
+// a multiple of elevationStep
 
 
 #include "Servo.h" //Works better than bare PWM, not sure why
 #include <SharpIR.h> //To read the IR sensor
 
-const int azimuthCenter=60; //Degrees -- straight forward, for this servo
-const int azimuthSweep=25; //Distance from center to edge -- half of range
+const int azimuthCenter=60; //Deg - straight forward
+const int azimuthSweep=25; //Center to edge of range
 const int azimuthStep=1; //"pixel" size, degrees
 
-const int azimuthLower=azimuthCenter-azimuthSweep; //Lower extremity
+const int azimuthLower=azimuthCenter-azimuthSweep; //Lower extent
 const int azimuthUpper=azimuthCenter+azimuthSweep;
 
 
@@ -44,13 +49,16 @@ void setup() {
 
 void loop() {
 
-  while(Serial.read()!='1'){} //Wait for a prompt from Python, so it can get all the data
+  while(Serial.read()!='1'){} //Wait for Python to be ready
   
-  for (int azimuth=azimuthLower; azimuth<=azimuthUpper; azimuth=azimuth+azimuthStep) { //Loop through horizontal positions
+  for (int azimuth=azimuthLower; azimuth<=azimuthUpper; \
+    azimuth=azimuth+azimuthStep) { //Loop through horizontal positions
+
     pan.write(azimuth); //Move the azimuth, prepare for a vertical stripe
     delay(400); //Wait for the servo to get where it's going
 
-    for (int elevation=elevationLower; elevation<=elevationUpper; elevation=elevation+elevationStep) { //Loop through vertical positions
+    for (int elevation=elevationLower; elevation<=elevationUpper; \
+      elevation=elevation+elevationStep) { //Loop through vertical positions
       tilt.write(elevation); //Move the servo
       delay(50); //Wait for the servo to get in position
 
@@ -58,9 +66,13 @@ void loop() {
       if(distance > 150) distance = 151; //Clamp values
       else if (distance < 20) distance = 20;
 
-      azimuthDegreesOffCenter=azimuth-azimuthCenter; //Transmit values relative to center
+      azimuthDegreesOffCenter=azimuth-azimuthCenter; 
       elevationDegreesOffCenter=elevation-elevationCenter;
-      Serial.println(String(azimuthDegreesOffCenter) + "," + String(elevationDegreesOffCenter) + "," + String(distance)); //Actually send the data
+        //Transmit values relative to center
+
+      Serial.println(String(azimuthDegreesOffCenter) + "," + \
+        String(elevationDegreesOffCenter) + "," + \
+        String(distance)); //Actually send the data
     }
   }
 
